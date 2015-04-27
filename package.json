@@ -1,0 +1,14 @@
+{
+        "name": "scorecenter",
+        "version": "0.0.1",
+        "dependencies": {
+                "koa": "latest",
+                "mongodb": "latest",
+                "koa-logger": "latest",
+                "koa-route": "latest",
+                "koa-static": "latest"
+        },
+        "engine": {
+                "node": "0.11"
+        }
+}
