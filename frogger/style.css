@@ -1,0 +1,32 @@
+#game{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+canvas {
+    margin: 5px;
+
+}
+
+#game_div {
+  display: block;
+  width: 409px;
+  height: 575px;
+  margin: 10px auto;
+  border-width: 10px;
+  border-color: #010101;
+  border-style: solid;
+  background-color: #cb630a;
+}
+
+#hiscores span {
+  padding: 10px;
+}
+
+body {
+  background-color: #128138; 
+    y-overflow: hidden; 
+}
+
+
