@@ -3,7 +3,11 @@ var koa = require('koa');
 var logger = require('koa-logger');
 var route = require('koa-route');
 var serve = require('koa-static');
+var cors = require('koa-cors');
 var app = koa();
+
+app.use(serve(__dirname + '/frogger'));
+app.use(cors({origin: true}));
 app.use(route.get('/highscores', highscoresPage));
 app.use(route.get('/highscores/:game_title', getHighScore));
 app.use(route.post('/submitscore', addHighScore));
@@ -15,6 +19,14 @@ app.use(logger());
 var mongoUri = 'mongodb://<dbuser>:<dbpassword>@<port>.mongolab.com:<port>/<appname>';
 var mongo = require('mongodb');
 var db;
+//mongo.MongoClient.connect(mongoUri, function (error, databaseConnection) {
+//  db = databaseConnection;
+//  if (!db) {
+//    console.log(error);
+//    db = error;
+//  }
+
+//});
 
 function *highscoresPage() {
   this.body = "Send a GET request to /highscore/<game name> for the top 10 high scores of that game"+
@@ -63,9 +75,10 @@ function findScores(title) {
 function *addHighScore() {
   var date = new Date();
   var req = this.request.body;
+
   //make sure no null fields
   if ((req.game_title === 'null') || (req.name === 'null') || (req.score === 'null')) {
-    this.body = 'Error: Some fields are null';
+    this.body = 404;
   } else {    
     //wait for completion of adding score to db
     this.body = yield postScore(encodeURI(req.game_title), encodeURI(req.name), parseInt(req.score));
