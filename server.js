@@ -4,10 +4,11 @@ var logger = require('koa-logger');
 var route = require('koa-route');
 var serve = require('koa-static');
 var cors = require('koa-cors');
+var parseBody = require('co-body');
 var app = koa();
 
 app.use(serve(__dirname + '/frogger'));
-app.use(cors({origin: true}));
+app.use(cors({origin: true, method: 'GET, POST'}));
 app.use(route.get('/highscores', highscoresPage));
 app.use(route.get('/highscores/:game_title', getHighScore));
 app.use(route.post('/submitscore', addHighScore));
@@ -45,7 +46,6 @@ function *getHighScore(game_title) {
 function findScores(title) {
   return function(callback) { 
     mongo.MongoClient.connect(mongoUri, function (error, db) {
-      
       var scores = db.collection('scores');
       if (error) {
         //cannot connect to db
@@ -64,6 +64,7 @@ function findScores(title) {
             callback(null, '{[]}');
           }
         }
+        db.close();
       });
     });
   };
@@ -74,8 +75,7 @@ function findScores(title) {
 //fields cannot be null
 function *addHighScore() {
   var date = new Date();
-  var req = this.request.body;
-
+  var req = yield parseBody(this);
   //make sure no null fields
   if ((req.game_title === 'null') || (req.name === 'null') || (req.score === 'null')) {
     this.body = 404;
