@@ -290,6 +290,7 @@ function initGame() {
   // Check if canvas is supported on browser
   if (canvas.getContext) {
     ctx = canvas.getContext('2d');
+    poll(0);
     setupCanvas();
   } else {
     alert('Sorry, canvas is not supported on your browser!');
@@ -496,12 +497,12 @@ function loseLife(){
 //Resets the game, update highscore
 function resetGame() {
   //score += Math.round(time_left*10);
-  var player_name = prompt("Enter your name to send high score");
+  var player_name = prompt("Game over! Enter your name to send high score");
   if (player_name) {
     if (player_name.length > 20) {
       player_name = player_name.substring(0, 20);
     }
-    submitScore(player_name);
+    submitScore(player_name, score);
   }
 
   if (score>highsc){
@@ -545,10 +546,11 @@ function checkLife() {
 //Increases speed of cars and logs, updates game for new level
 function nextLevel(){
   //score += Math.round(time_left*10);
+  alert("LEVEL UP!");
   frogger.resetPosition();
   lvl++;
-  increaseObstacleSpd(lanes, 2);
-  increaseObstacleSpd(logs, 2);
+  increaseObstacleSpd(lanes, 1.1);
+  increaseObstacleSpd(logs, 1.1);
   frog_on_log = false;
   drawStats(lives, lvl, score, highsc);
   //timer = 0;
@@ -557,7 +559,7 @@ function nextLevel(){
 
 //Check if Frogger makes it to the other side, add bonus scores if appropriate
 function checkWin () {
-  if (frogger.y < 120) {
+  if (frogger.y < (120 - frogger.h)) {
     frog_home += 1;
     if (frog_home >= 5) {
       changeScore(1000);
@@ -573,9 +575,41 @@ function checkWin () {
 function increaseObstacleSpd(obs, num) {
    for (var i=0; i < obs.length; i++) {
     for (var j = 0; j < obs[i].length; j++) {
-      obs[i][j].speed += num;
+      obs[i][j].speed *= num;
     }
   }
 }
 
+//Poll and display latest high scores
+function poll(interval) {
+  setTimeout(function() {
+    $.ajax({
+      method: "GET",
+      url: "https://floating-taiga-9282.herokuapp.com/highscores/frogger",
+      success: function (data) {
+        if (data) {
+          $("#hiscores p").empty();
+          $.each(data, function(i, val) {
+            console.log(val);
+            $("#hiscores").append('<p><span class="name">'+val.name+'</span><span class="score">'+val.score+'</span></p>');
+          });
+        } else {
+          alert("Error of some sort!");
+        }
+      },
+      dataType: "json",
+      complete: poll(15000),
+    })
+  }, interval);
+}
+
+//Add hiscore to database     
+function submitScore(player_name, score) {
+  $.ajax({
+    method: "POST",
+    url: "https://floating-taiga-9282.herokuapp.com/submitscore",
+    data: {game_title: 'frogger', name: player_name, score: score },
+    dataType: "json",
+  })
+}
 

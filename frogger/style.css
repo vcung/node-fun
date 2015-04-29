@@ -13,7 +13,7 @@ canvas {
   display: block;
   width: 409px;
   height: 575px;
-  margin: 10px auto;
+  margin: 25px auto;
   border-width: 10px;
   border-color: #010101;
   border-style: solid;
@@ -23,10 +23,23 @@ canvas {
 #hiscores span {
   padding: 10px;
 }
-
+#hiscores {
+  text-align: center;
+  color: #fff; 
+  font-family: "Comic Sans MS", serif;
+}
 body {
   background-color: #128138; 
     y-overflow: hidden; 
+}
+
+@media screen and (min-width: 1000px) {
+  #hiscores {
+    position: absolute;
+    left: 75%;
+    top: 0;
+    margin: 10px 20px;
+  }  
 }
 
 

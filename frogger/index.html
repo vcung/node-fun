@@ -8,40 +8,11 @@
   <body onload = "initGame();">
     <div id="game_div">
       <canvas id="game" height="565" width="399"></canvas>
-      <script type="text/javascript" src="game.js"></script>
     </div>
     <div id="hiscores">
-      <h1>Hiscores</h1>
+      <h1>HiScores</h1>
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script> 
-    <script>
-    setTimeout(function() {
-      $.ajax({
-        method: "GET",
-        url: "https://floating-taiga-9282.herokuapp.com/highscores/frogger",
-        success: function (data) {
-          if (data) {
-            $.each(data, function(i, val) {
-              console.log(val);
-              $("#hiscores").append('<p><span class="name">'+val.name+'</span><span class="score">'+val.score+'</span></p>');
-            });
-          } else {
-            alert("Error of some sort!");
-          }
-        },
-        dataType: "json",
-      }), 10000});
-
-     
-    function submitScore(name) {
-      $.ajax({
-        method: "POST",
-        url: "https://floating-taiga-9282.herokuapp.com/submitscore",
-        data: {},
-        dataType: "json",
-      });
-    }
-    </script>
+    <script type="text/javascript" src="game.js"></script>
   </body>
 </html>
-<!--uist, tochi, acm hci conference, human factors/eng psych,h.r.i,-->
