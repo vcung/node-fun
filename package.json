@@ -6,7 +6,9 @@
                 "mongodb": "latest",
                 "koa-logger": "latest",
                 "koa-route": "latest",
-                "koa-static": "latest"
+                "koa-static": "latest",
+                "koa-cors": "latest",
+                "co-body": "latest"
         },
         "engine": {
                 "node": "0.11"
